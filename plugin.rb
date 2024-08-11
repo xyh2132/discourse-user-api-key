@@ -70,12 +70,7 @@ after_initialize do
   add_to_class(:user, :api_keys) do
     ApiKey.where(user_id: id)
   end
-<<<<<<< HEAD
 
-  # 移除 UserIndexSerializer 的引用
-  # add_to_class(UserIndexSerializer, :include_api_keys?) { true }
-
-  # 修改用户菜单项的添加方式
   on(:user_menu_items) do |items|
     items.push(
       {
@@ -95,29 +90,3 @@ register_asset "stylesheets/user-api-key.scss"
 Discourse::Application.routes.append do
   get "u/:username/preferences/api-keys" => "users#preferences", constraints: { username: RouteFormat.username }
 end
-=======
-
-  # 移除 UserIndexSerializer 的引用
-  # add_to_class(UserIndexSerializer, :include_api_keys?) { true }
-
-  # 修改用户菜单项的添加方式
-  on(:user_menu_items) do |items|
-    items.push(
-      {
-        id: "api-keys",
-        icon: "key",
-        href: "/u/#{items.user.username}/preferences/api-keys",
-        title: I18n.t("js.user.api_keys.title")
-      }
-    )
-  end
-end
-
-# 添加资源
-register_asset "stylesheets/user-api-key.scss"
-
-# 添加路由
-Discourse::Application.routes.append do
-  get "u/:username/preferences/api-keys" => "users#preferences", constraints: { username: RouteFormat.username }
-end
->>>>>>> 236191678bce22f54d0e3f490614eeb9d59d57d2
