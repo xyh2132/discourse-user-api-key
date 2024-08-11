@@ -1,0 +1,13 @@
+en:
+  js:
+    user_api_key:
+      title: "API 密钥"
+      create: "创建新 API 密钥"
+      key: "密钥"
+      scopes: "作用域"
+      created_at: "创建时间"
+      actions: "操作"
+      revoke: "撤销"
+      none: "您还没有 API 密钥。"
+      created: "API 密钥创建成功。"
+      revoked: "API 密钥已成功撤销。"

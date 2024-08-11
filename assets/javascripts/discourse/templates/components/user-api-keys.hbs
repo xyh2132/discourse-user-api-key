@@ -1,0 +1,35 @@
+<div class="user-api-keys">
+  <h2>{{i18n "user_api_key.title"}}</h2>
+  <button {{on "click" this.createApiKey}} class="btn btn-primary">
+    {{i18n "user_api_key.create"}}
+  </button>
+
+  {{#if this.model.length}}
+    <table class="api-keys-list">
+      <thead>
+        <tr>
+          <th>{{i18n "user_api_key.key"}}</th>
+          <th>{{i18n "user_api_key.scopes"}}</th>
+          <th>{{i18n "user_api_key.created_at"}}</th>
+          <th>{{i18n "user_api_key.actions"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this.model as |apiKey|}}
+          <tr>
+            <td>{{apiKey.key}}</td>
+            <td>{{apiKey.scopes}}</td>
+            <td>{{format-date apiKey.created_at}}</td>
+            <td>
+              <button {{on "click" (fn this.revokeApiKey apiKey)}} class="btn btn-danger">
+                {{i18n "user_api_key.revoke"}}
+              </button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p>{{i18n "user_api_key.none"}}</p>
+  {{/if}}
+</div>
