@@ -1,6 +1,6 @@
 # name: discourse-user-api-key
 # about: 允许用户生成和管理自己的 API 密钥
-# version: 0.2
+# version: 0.3
 # authors: Your Name
 # url: https://github.com/your-username/discourse-user-api-key
 
@@ -70,26 +70,27 @@ after_initialize do
   add_to_class(:user, :api_keys) do
     ApiKey.where(user_id: id)
   end
-end
 
-register_asset "stylesheets/user-api-key.scss"
+  # 移除 UserIndexSerializer 的引用
+  # add_to_class(UserIndexSerializer, :include_api_keys?) { true }
 
-Discourse::Application.routes.append do
-  get "u/:username/preferences/api-keys" => "users#preferences", constraints: { username: RouteFormat.username }
-end
-
-after_initialize do
-  add_to_class(UserIndexSerializer, :include_api_keys?) { true }
-
-  add_to_serializer(:user_menu, :nav_items) do
-    object.nav_items.push(
-      Navbar::Item.new(
+  # 修改用户菜单项的添加方式
+  on(:user_menu_items) do |items|
+    items.push(
+      {
         id: "api-keys",
         icon: "key",
-        href: "/u/#{object.username}/preferences/api-keys",
+        href: "/u/#{items.user.username}/preferences/api-keys",
         title: I18n.t("js.user.api_keys.title")
-      )
-    ) if object.can_create_api_key
-    object.nav_items
+      }
+    )
   end
+end
+
+# 添加资源
+register_asset "stylesheets/user-api-key.scss"
+
+# 添加路由
+Discourse::Application.routes.append do
+  get "u/:username/preferences/api-keys" => "users#preferences", constraints: { username: RouteFormat.username }
 end
