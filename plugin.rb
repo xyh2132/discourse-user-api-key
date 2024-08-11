@@ -1,6 +1,6 @@
 # name: discourse-user-api-key
 # about: 允许用户生成和管理自己的 API 密钥
-# version: 0.3
+# version: 0.1
 # authors: Your Name
 # url: https://github.com/your-username/discourse-user-api-key
 
@@ -53,40 +53,17 @@ after_initialize do
     end
   end
 
-  DiscourseUserApiKey::Engine.routes.draw do
-    get "/" => "user_api_key#index"
-    post "/create" => "user_api_key#create"
-    delete "/:id" => "user_api_key#destroy"
-  end
-
   Discourse::Application.routes.append do
     mount ::DiscourseUserApiKey::Engine, at: "/user-api-key"
   end
 
   add_to_serializer(:current_user, :can_create_api_key) { true }
-  
-  register_svg_icon "key" if respond_to?(:register_svg_icon)
 
-  add_to_class(:user, :api_keys) do
-    ApiKey.where(user_id: id)
-  end
-
-  on(:user_menu_items) do |items|
-    items.push(
-      {
-        id: "api-keys",
-        icon: "key",
-        href: "/u/#{items.user.username}/preferences/api-keys",
-        title: I18n.t("js.user.api_keys.title")
-      }
-    )
+  DiscourseUserApiKey::Engine.routes.draw do
+    get "/" => "user_api_key#index"
+    post "/create" => "user_api_key#create"
+    delete "/:id" => "user_api_key#destroy"
   end
 end
 
-# 添加资源
 register_asset "stylesheets/user-api-key.scss"
-
-# 添加路由
-Discourse::Application.routes.append do
-  get "u/:username/preferences/api-keys" => "users#preferences", constraints: { username: RouteFormat.username }
-end
